@@ -19,13 +19,13 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore BlazorApp1/BlazorApp1.csproj
 
       - name: Build
         run: dotnet publish BlazorApp1/BlazorApp1.csproj -c:Release --no-restore
 
       - name: Publish
-        run: dotnet publish --configuration Release --no-build --output ./published-app
+        run: dotnet publish BlazorApp1/BlazorApp1.csproj --configuration Release --no-build --output ./published-app
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
