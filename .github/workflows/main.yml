@@ -1,29 +1,34 @@
+name: Deploy to GitHub Pages
+
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - gh_pages
+
 jobs:
-  deploy-to-github-pages:
-  # use ubuntu-latest image to run steps on
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - name: Install .NET WASM Build Tools
-      run: dotnet workload install wasm-tools
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Publish .NET Core Project
-      run: dotnet publish BlazorApp1/BlazorApp1.csproj -c:Release -p:GHPages=true -o dist/Web --nologo
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.TOKEN }}
-        BRANCH: main
-        FOLDER: dist/Web/wwwroot
+      - name: Restore dependencies
+        run: dotnet restore BlazorApp1/BlazorApp1.csproj
+
+      - name: Build
+        run: dotnet publish BlazorApp1/BlazorApp1.csproj -c:Release --no-restore
+
+      - name: Publish
+        run: dotnet publish BlazorApp1/BlazorApp1.csproj --configuration Release --no-build --output ./published-app
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          publish_dir: ./published-app/wwwroot
