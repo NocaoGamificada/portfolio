@@ -21,11 +21,9 @@ jobs:
     - name: Publish .NET Core Project
       run: dotnet publish BlazorApp1/BlazorApp1.csproj -c:Release -p:GHPages=true -o dist/Web --nologo
 
-    - name: Commit wwwroot to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@3.7.1
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        GITHUB_USERNAME: ${{ secrets.USERNAME }}
-        GITHUB_PASSWORD: ${{ secrets.TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        github_token: ${{ secrets.TOKEN }}
         BRANCH: main
         FOLDER: dist/Web/wwwroot
