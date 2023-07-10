@@ -4,7 +4,7 @@ on:
       - main
   pull_request:
     branches:
-      - gh_pages
+      - main
 jobs:
   deploy-to-github-pages:
   # use ubuntu-latest image to run steps on
@@ -25,5 +25,4 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.TOKEN }}
-        BRANCH: main
-        FOLDER: dist/Web/wwwroot
+        BRANCH: gh_pages
